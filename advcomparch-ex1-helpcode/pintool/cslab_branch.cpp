@@ -173,27 +173,39 @@ VOID InitPredictors()
 
 //    NbitPredictor *nbitPred = new NbitPredictor(14, 2);
 //    branch_predictors.push_back(nbitPred);
-
-    // Alternative FSMs
-    TwobitPredictor_FSM1 *nbitPredFSM1 = new TwobitPredictor_FSM1();
-    branch_predictors.push_back(nbitPredFSM1);
-    TwobitPredictor_FSM2 *nbitPredFSM2 = new TwobitPredictor_FSM2();
-    branch_predictors.push_back(nbitPredFSM2);
-    TwobitPredictor_FSM3 *nbitPredFSM3 = new TwobitPredictor_FSM3();
-    branch_predictors.push_back(nbitPredFSM3);
-    TwobitPredictor_FSM4 *nbitPredFSM4 = new TwobitPredictor_FSM4();
-    branch_predictors.push_back(nbitPredFSM4);
-    TwobitPredictor_FSM5 *nbitPredFSM5 = new TwobitPredictor_FSM5();
-    branch_predictors.push_back(nbitPredFSM5);
-
-    // 32K hardware
-    NbitPredictor *onebitPred = new NbitPredictor(15, 1);
-    branch_predictors.push_back(onebitPred);
-    NbitPredictor *fourbitPred = new NbitPredictor(13, 4);
-    branch_predictors.push_back(fourbitPred);    
-    // Pentium-M predictor
+//
+//    // Alternative FSMs
+//    TwobitPredictor_FSM1 *nbitPredFSM1 = new TwobitPredictor_FSM1();
+//    branch_predictors.push_back(nbitPredFSM1);
+//    TwobitPredictor_FSM2 *nbitPredFSM2 = new TwobitPredictor_FSM2();
+//    branch_predictors.push_back(nbitPredFSM2);
+//    TwobitPredictor_FSM3 *nbitPredFSM3 = new TwobitPredictor_FSM3();
+//    branch_predictors.push_back(nbitPredFSM3);
+//    TwobitPredictor_FSM4 *nbitPredFSM4 = new TwobitPredictor_FSM4();
+//    branch_predictors.push_back(nbitPredFSM4);
+//    TwobitPredictor_FSM5 *nbitPredFSM5 = new TwobitPredictor_FSM5();
+//    branch_predictors.push_back(nbitPredFSM5);
+//
+//    // 32K hardware
+//    NbitPredictor *onebitPred = new NbitPredictor(15, 1);
+//    branch_predictors.push_back(onebitPred);
+//    NbitPredictor *fourbitPred = new NbitPredictor(13, 4);
+//    branch_predictors.push_back(fourbitPred);    
+//    // Pentium-M predictor
 //    PentiumMBranchPredictor *pentiumPredictor = new PentiumMBranchPredictor();
 //    branch_predictors.push_back(pentiumPredictor);
+}
+
+VOID BTB()
+{
+    btb_predictors.push_back(new BTBPredictor(512, 1));
+    btb_predictors.push_back(new BTBPredictor(512, 2));
+    btb_predictors.push_back(new BTBPredictor(256, 2));
+    btb_predictors.push_back(new BTBPredictor(256, 4));
+    btb_predictors.push_back(new BTBPredictor(128, 2));
+    btb_predictors.push_back(new BTBPredictor(128, 4));
+    btb_predictors.push_back(new BTBPredictor(64, 4));
+    btb_predictors.push_back(new BTBPredictor(64, 8));
 }
 
 VOID InitRas()
@@ -214,6 +226,7 @@ int main(int argc, char *argv[])
 
     // Initialize predictors and RAS vector
     InitPredictors();
+    BTB();
     InitRas();
 
     // Instrument function calls in order to catch __parsec_roi_{begin,end}

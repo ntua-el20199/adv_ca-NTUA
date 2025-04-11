@@ -338,43 +338,94 @@ private:
     unsigned int table_entries;
 };
 
-// Fill in the BTB implementation ...
-class BTBPredictor : public BranchPredictor
-{
-public:
-	BTBPredictor(int btb_lines, int btb_assoc)
-	     : table_lines(btb_lines), table_assoc(btb_assoc)
-	{
-		/* ... fill me ... */
-	}
-
-	~BTBPredictor() {
-		/* ... fill me ... */
-	}
-
-    virtual bool predict(ADDRINT ip, ADDRINT target) {
-		/* ... fill me ... */
-		return false;
-	}
-
-    virtual void update(bool predicted, bool actual, ADDRINT ip, ADDRINT target) {
-		/* ... fill me ... */
-	}
-
-    virtual string getName() { 
-        std::ostringstream stream;
-		stream << "BTB-" << table_lines << "-" << table_assoc;
-		return stream.str();
-	}
-
-    UINT64 getNumCorrectTargetPredictions() { 
-		/* ... fill me ... */
-		return 0;
-	}
-
-private:
-	int table_lines, table_assoc;
-};
+class BTBPredictor : public BranchPredictor {
+    public:
+        BTBPredictor(int btb_lines, int btb_assoc)
+            : table_lines(btb_lines), table_assoc(btb_assoc) {
+            table = new BTB_SET[table_lines];
+            correct_target_predictions = 0;
+        }
+    
+        ~BTBPredictor() {
+            delete[] table;
+        }
+    
+        // Predict taken if IP exists in the BTB
+        virtual bool predict(ADDRINT ip, ADDRINT target) {
+            int index = ip % table_lines;
+            BTB_SET &set = table[index];
+    
+            for (const auto &entry : set) {
+                if (entry.ip == ip)
+                    return true;
+            }
+    
+            return false;
+        }
+    
+        virtual void update(bool predicted, bool actual, ADDRINT ip, ADDRINT target) {
+            int index = ip % table_lines;
+            BTB_SET &set = table[index];
+    
+            updateCounters(predicted, actual);
+    
+            if (!predicted && actual) {
+                // insert new as MRU
+                set.push_back({ip, target});
+                if (set.size() > static_cast<size_t>(table_assoc))
+                    set.erase(set.begin()); // LRU removal
+            }
+            else if (predicted && actual) {
+                for (auto it = set.begin(); it != set.end(); ++it) {
+                    if (it->ip == ip) {
+                        if (it->target == target)
+                            correct_target_predictions++;
+    
+                        set.erase(it);
+                        break;
+                    }
+                }
+                set.push_back({ip, target}); // reinsert as MRU
+            }
+            else if (predicted && !actual) {
+                for (auto it = set.begin(); it != set.end(); ++it) {
+                    if (it->ip == ip) {
+                        set.erase(it); // remove mispredicted entry
+                        break;
+                    }
+                }
+            }
+            else {
+                // Not taken & not in BTB → correct target (no jump)
+                correct_target_predictions++;
+            }
+        }
+    
+        virtual string getName() {
+            std::ostringstream stream;
+            stream << "BTB-" << table_lines << "-" << table_assoc;
+            return stream.str();
+        }
+    
+        UINT64 getNumCorrectTargetPredictions() {
+            return correct_target_predictions;
+        }
+    
+    private:
+        struct addr_pair {
+            ADDRINT ip;
+            ADDRINT target;
+        };
+    
+        typedef vector<addr_pair> BTB_SET;
+        BTB_SET *table;
+    
+        int table_lines;
+        int table_assoc;
+        UINT64 correct_target_predictions;
+    };
+    
+    
 
 
 #endif

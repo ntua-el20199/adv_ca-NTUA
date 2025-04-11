@@ -210,7 +210,7 @@ VOID BTB()
 
 VOID InitRas()
 {
-    for (UINT32 i = 1; i <= 4; i*=2)
+    for (UINT32 i = 4; i <= 64; i*=2)
         ras_vec.push_back(new RAS(i));
 }
 
@@ -225,8 +225,8 @@ int main(int argc, char *argv[])
     outFile.open(KnobOutputFile.Value().c_str());
 
     // Initialize predictors and RAS vector
-    InitPredictors();
-    BTB();
+    //InitPredictors();
+    //BTB();
     InitRas();
 
     // Instrument function calls in order to catch __parsec_roi_{begin,end}

@@ -4,6 +4,7 @@
 #include <sstream> // std::ostringstream
 #include <cmath>   // pow(), floor
 #include <cstring> // memset()
+#include <list>
 
 /**
  * A generic BranchPredictor base class.
@@ -338,92 +339,96 @@ private:
     unsigned int table_entries;
 };
 
-class BTBPredictor : public BranchPredictor {
-    public:
-        BTBPredictor(int btb_lines, int btb_assoc)
-            : table_lines(btb_lines), table_assoc(btb_assoc) {
-            table = new BTB_SET[table_lines];
-            correct_target_predictions = 0;
-        }
-    
-        ~BTBPredictor() {
-            delete[] table;
-        }
-    
-        // Predict taken if IP exists in the BTB
-        virtual bool predict(ADDRINT ip, ADDRINT target) {
-            int index = ip % table_lines;
-            BTB_SET &set = table[index];
-    
-            for (const auto &entry : set) {
-                if (entry.ip == ip)
-                    return true;
-            }
-    
-            return false;
-        }
-    
-        virtual void update(bool predicted, bool actual, ADDRINT ip, ADDRINT target) {
-            int index = ip % table_lines;
-            BTB_SET &set = table[index];
-    
-            updateCounters(predicted, actual);
-    
-            if (!predicted && actual) {
-                // insert new as MRU
-                set.push_back({ip, target});
-                if (set.size() > static_cast<size_t>(table_assoc))
-                    set.erase(set.begin()); // LRU removal
-            }
-            else if (predicted && actual) {
-                for (auto it = set.begin(); it != set.end(); ++it) {
-                    if (it->ip == ip) {
-                        if (it->target == target)
-                            correct_target_predictions++;
-    
-                        set.erase(it);
-                        break;
-                    }
-                }
-                set.push_back({ip, target}); // reinsert as MRU
-            }
-            else if (predicted && !actual) {
-                for (auto it = set.begin(); it != set.end(); ++it) {
-                    if (it->ip == ip) {
-                        set.erase(it); // remove mispredicted entry
-                        break;
-                    }
-                }
-            }
-            else {
-                // Not taken & not in BTB → correct target (no jump)
-                correct_target_predictions++;
-            }
-        }
-    
-        virtual string getName() {
-            std::ostringstream stream;
-            stream << "BTB-" << table_lines << "-" << table_assoc;
-            return stream.str();
-        }
-    
-        UINT64 getNumCorrectTargetPredictions() {
-            return correct_target_predictions;
-        }
-    
-    private:
-        struct addr_pair {
-            ADDRINT ip;
-            ADDRINT target;
-        };
-    
-        typedef vector<addr_pair> BTB_SET;
-        BTB_SET *table;
-    
-        int table_lines;
-        int table_assoc;
-        UINT64 correct_target_predictions;
-    };
+class BTBPredictor : public BranchPredictor
+{
+public:
+	BTBPredictor(int btb_lines, int btb_assoc)
+	     : table_lines(btb_lines), table_assoc(btb_assoc), correct_target_predictions(0)
+	{
+		this->num_sets = btb_lines / btb_assoc;
+		sets.resize(this->num_sets);
+	}
+
+	~BTBPredictor() { }
+
+	virtual bool predict(ADDRINT ip, ADDRINT target) {
+		// find ip's set
+		unsigned int index = ip % this->num_sets;
+		std::list<BufferEntry>& s = this->sets[index];
+		
+		for(auto it = s.begin(); it != s.end(); it++) {
+			if(it->ip == ip) { // found the instruction address
+				BufferEntry be = *it;
+				s.erase(it);
+				s.push_front(be); // move to the front of the list
+						  
+				if(be.target == target) {
+					correct_target_predictions++;
+					return true;
+				} else {
+					return false;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	virtual void update(bool predicted, bool actual, ADDRINT ip, ADDRINT target) {
+		unsigned int index = ip % this->num_sets;
+		std::list<BufferEntry>& s = this->sets[index];
+		
+		for(auto it = s.begin(); it != s.end(); it++) {
+			if(it->ip == ip) {
+				if(actual) { // was branch taken?
+					BufferEntry be = *it;
+					s.erase(it);
+					s.push_front(be);
+				} else { // branch was not taken
+					s.erase(it);
+				}
+
+        			updateCounters(predicted, actual);
+				return;
+			}
+		}
+
+		// not found in BTB and he instruction is a taken branch
+		if(actual) {
+			// if size of the set is max remove LRU element
+			if((int)s.size() >= this->table_assoc) s.pop_back();
+
+			// now add the new BufferEntry at the start of the list
+			s.push_front({ip, target});
+		}
+        	
+		updateCounters(predicted, actual);
+	}
+
+	virtual string getName() { 
+        	std::ostringstream stream;
+		stream << "BTB-" << table_lines << "-" << table_assoc;
+		return stream.str();
+	}
+
+    	UINT64 getNumCorrectTargetPredictions() { 
+		return this->correct_target_predictions;
+	}
+
+private:
+	int table_lines, table_assoc, num_sets;
+
+	struct BufferEntry {
+		ADDRINT ip;
+		ADDRINT target;
+	};
+
+	UINT64 correct_target_predictions;
+	
+	// using vector of lists to implement LRU update
+	// each set has a list of BufferEntry with size table_assoc
+	std::vector< std::list<BufferEntry> > sets; 
+};
     
     
 

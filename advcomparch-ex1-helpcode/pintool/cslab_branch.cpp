@@ -210,10 +210,14 @@ VOID BTB()
 
 VOID InitRas()
 {
-    for (UINT32 i = 4; i <= 64; i*=2)
+    for (UINT32 i = 4; i <= 64; i*=2) {
         ras_vec.push_back(new RAS(i));
-}
+        if (i == 32)
+            ras_vec.push_back(new RAS(48));
 
+        }
+    }
+    
 int main(int argc, char *argv[])
 {
     PIN_InitSymbols();

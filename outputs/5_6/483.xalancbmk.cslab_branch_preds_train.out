@@ -1,48 +1,48 @@
-Total Instructions: 879396830758
+Total Instructions: 329537826008
 
 RAS: (Correct - Incorrect)
-RAS (16 entries): 19692810180 128060370
+RAS (16 entries): 9014890431 1319911
 
 Branch Predictors: (Name - Correct - Incorrect)
-  Static AlwaysTaken: 72392644314 153390115998
-  Static BTFNT: 204050567027 21732193285
-  Nbit-8K-4: 218840389409 6942370903
-  Pentium-M: 214992842012 10789918300
-  Local History Two Level Predictor(BHT entries=2048, BHT length=8): 222737811424 3044948888
-  Local History Two Level Predictor(BHT entries=4096, BHT length=4): 220058329608 5724430704
-  Local History Two Level Predictor(BHT entries=8192, BHT length=2): 219695954234 6086806078
-  Global History Two Level Predictor (entries=16384, nbit=2): 219155920596 6626839716
-  Global History Two Level Predictor (entries=8192, nbit=4): 220012210827 5770549485
-  Alpha 21264: 190340427939 35442332373
+  Static AlwaysTaken: 36376879946 41952430988
+  Static BTFNT: 66687688214 11641622720
+  Nbit-8K-4: 74501033073 3828277861
+  Pentium-M: 72498058279 5831252655
+  Local History Two Level Predictor(BHT entries=2048, BHT length=8): 76887602379 1441708555
+  Local History Two Level Predictor(BHT entries=4096, BHT length=4): 74724559607 3604751327
+  Local History Two Level Predictor(BHT entries=8192, BHT length=2): 74517975364 3811335570
+  Global History Two Level Predictor (entries=16384, nbit=2): 74526879706 3802431228
+  Global History Two Level Predictor (entries=8192, nbit=4): 74549570667 3779740267
+  Alpha 21264: 69562611000 8766699934
   Tournament Hybrid Predictor
 | Meta : Nbit-1K-2
 | Pred0: Nbit-8K-2
 | Pred1: Nbit-4K-4
-: 218824076745 6958683567
+: 74506879498 3822431436
   Tournament Hybrid Predictor
 | Meta : Nbit-2K-2
 | Pred0: Nbit-8K-2
 | Pred1: Global History Two Level Predictor (entries=8192, nbit=2)
-: 219174574483 6608185829
+: 74525450833 3803860101
   Tournament Hybrid Predictor
 | Meta : Nbit-2K-2
 | Pred0: Nbit-8K-2
 | Pred1: Local History Two Level Predictor(BHT entries=4096, BHT length=2)
-: 219662749311 6120011001
+: 74517706782 3811604152
   Tournament Hybrid Predictor
 | Meta : Nbit-2K-2
 | Pred0: Local History Two Level Predictor(BHT entries=4096, BHT length=2)
 | Pred1: Global History Two Level Predictor (entries=8192, nbit=2)
-: 219871526765 5911233547
+: 74533526737 3795784197
   Tournament Hybrid Predictor
 | Meta : Nbit-2K-2
 | Pred0: Global History Two Level Predictor (entries=8192, nbit=2)
 | Pred1: Global History Two Level Predictor (entries=4096, nbit=4)
-: 220017806233 5764954079
+: 74549281028 3780029906
   Tournament Hybrid Predictor
 | Meta : Nbit-2K-2
 | Pred0: Local History Two Level Predictor(BHT entries=4096, BHT length=2)
 | Pred1: Local History Two Level Predictor(BHT entries=2048, BHT length=4)
-: 220116451700 5666308612
+: 74720727419 3608583515
 
 BTB Predictors: (Name - Correct - Incorrect - TargetCorrect)

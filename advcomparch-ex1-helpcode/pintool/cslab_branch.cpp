@@ -192,8 +192,9 @@ VOID InitPredictors()
 //    NbitPredictor *fourbitPred = new NbitPredictor(13, 4);
 //    branch_predictors.push_back(fourbitPred);    
 //    // Pentium-M predictor
-//    PentiumMBranchPredictor *pentiumPredictor = new PentiumMBranchPredictor();
-//    branch_predictors.push_back(pentiumPredictor);
+
+// 5_6
+
 }
 
 VOID BTB()
@@ -217,7 +218,7 @@ VOID InitRas()
 
         }
     }
-    
+
 int main(int argc, char *argv[])
 {
     PIN_InitSymbols();

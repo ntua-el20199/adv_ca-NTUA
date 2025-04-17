@@ -179,6 +179,8 @@ INPUT ./figures/5_3/471.omnetpp.cslab_branch_preds_ref.out.png
 INPUT ./figures/5_3/471.omnetpp.cslab_branch_preds_ref.out.png
 INPUT ./figures/5_3/483.xalancbmk.cslab_branch_preds_ref.out.png
 INPUT ./figures/5_3/483.xalancbmk.cslab_branch_preds_ref.out.png
+INPUT ./figures/5_3/predictor_geometric_means.png
+INPUT ./figures/5_3/predictor_geometric_means.png
 INPUT ./report.aux
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb

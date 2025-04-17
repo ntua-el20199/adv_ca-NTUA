@@ -230,8 +230,8 @@ int main(int argc, char *argv[])
     outFile.open(KnobOutputFile.Value().c_str());
 
     // Initialize predictors and RAS vector
-    InitPredictors();
-    //BTB();
+    //InitPredictors();
+    BTB();
     //InitRas();
 
     // Instrument function calls in order to catch __parsec_roi_{begin,end}

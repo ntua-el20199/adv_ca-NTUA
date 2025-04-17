@@ -6,39 +6,52 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 
-## For nbit predictors
-predictors_to_plot = [ "  Nbit-16K-" ]
+# Desired order
+desired_order = ["FSM1_16K-2", "FSM2_16K-2", "FSM3_16K-2", "FSM4_16K-2", "FSM5_16K-2"]
 
+# Predictor prefix to look for
+predictors_to_plot = [ "FSM" ]
+
+
+# Data collection
+mpki_data = {}
+
+# Read input file
+with open(sys.argv[1]) as fp:
+    for line in fp:
+        tokens = line.split()
+        if line.startswith("Total Instructions:"):
+            total_ins = int(tokens[2])
+        else:
+            for pred_prefix in predictors_to_plot:
+                if line.strip().startswith(pred_prefix):
+                    name = tokens[0].strip(':')
+                    correct = int(tokens[1])
+                    incorrect = int(tokens[2])
+                    mpki = incorrect / (total_ins / 1000.0)
+                    mpki_data[name] = mpki
+
+# Organize data in the specified order
 x_Axis = []
 mpki_Axis = []
 
-fp = open(sys.argv[1])
-line = fp.readline()
-while line:
-	tokens = line.split()
-	if line.startswith("Total Instructions:"):
-		total_ins = int(tokens[2])
-	else:
-		for pred_prefix in predictors_to_plot:
-			if line.startswith(pred_prefix):
-				predictor_string = tokens[0].split(':')[0]
-				correct_predictions = int(tokens[1])
-				incorrect_predictions = int(tokens[2])
-				x_Axis.append(predictor_string)
-				mpki_Axis.append(incorrect_predictions / (total_ins / 1000.0))
+for name in desired_order:
+    if name in mpki_data:
+        x_Axis.append(name)
+        mpki_Axis.append(mpki_data[name])
 
-	line = fp.readline()
-
+# Plotting
 fig, ax1 = plt.subplots()
 ax1.grid(True)
 
 xAx = np.arange(len(x_Axis))
-ax1.xaxis.set_ticks(np.arange(0, len(x_Axis), 1))
+ax1.set_xticks(xAx)
 ax1.set_xticklabels(x_Axis, rotation=45)
 ax1.set_xlim(-0.5, len(x_Axis) - 0.5)
 ax1.set_ylim(min(mpki_Axis) - 0.05, max(mpki_Axis) + 0.05)
 ax1.set_ylabel("$MPKI$")
-line1 = ax1.plot(mpki_Axis, label="mpki", color="red",marker='x')
+ax1.plot(xAx, mpki_Axis, label="mpki", color="red", marker='x')
 
 plt.title("MPKI")
-plt.savefig(input("Please provide a filename for the produced file (e.g. output.png): "),bbox_inches="tight")
+plt.tight_layout()
+plt.savefig(sys.argv[1] + ".png",bbox_inches="tight")

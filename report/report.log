@@ -1,8 +1,8 @@
-This is LuaHBTeX, Version 1.22.0 (TeX Live 2025)  (format=lualatex 2025.4.9)  10 APR 2025 19:23
+This is LuaHBTeX, Version 1.22.0 (TeX Live 2025)  (format=lualatex 2025.4.17)  17 APR 2025 14:19
  restricted system commands enabled.
  file:line:error style messages enabled.
-**/home/harris/Drive/University/adv_ca/report/report
-(/home/harris/Drive/University/adv_ca/report/report.tex
+**/home/harris/github_repos/adv_ca-NTUA/report/report.tex
+(/home/harris/github_repos/adv_ca-NTUA/report/report.tex
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-03-26>
 Lua module: luaotfload 2024-12-03 v3.29 Lua based OpenType font support
@@ -79,7 +79,7 @@ Package: fontspec-luatex 2024/05/11 v2.9e Font selection for XeLaTeX and LuaLaTe
  (/opt/texlive/2025/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
 ) (/opt/texlive/2025/texmf-dist/tex/latex/fontspec/fontspec.cfg))) (/opt/texlive/2025/texmf-dist/tex/generic/babel/babel.sty
-Package: babel 2025/03/27 v25.6 The multilingual framework for pdfLaTeX, LuaLaTeX and XeLaTeX
+Package: babel 2025/04/14 v25.7 The multilingual framework for pdfLaTeX, LuaLaTeX and XeLaTeX
  (/opt/texlive/2025/texmf-dist/tex/generic/babel/luababel.def
 \bbl@readstream=\read2
 \l@dumylang=\language2
@@ -396,37 +396,20 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <8> on input line 31.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 31.
- (/opt/texlive/2025/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2024/09/23 1.10c listings language file
-) (/opt/texlive/2025/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2024/09/23 1.10c listings language file
-) (/opt/texlive/2025/texmf-dist/tex/latex/listings/lstmisc.sty
-File: lstmisc.sty 2024/09/23 1.10c (Carsten Heinz)
-)
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 57.
+(Font)              <7> on input line 42.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 57.
+(Font)              <5> on input line 42.
 
-Overfull \hbox (16.095pt too wide) in paragraph at lines 58--59
-[]\TU/lmtt/m/n/10 cntr_bits \TU/TimesNewRoman(0)/m/n/10 : Ορίζει το πλήθος των bits κάθε μετρητή στον πίνακα. Όσο περισσότερα
+Overfull \hbox (189.16418pt too wide) in paragraph at lines 42--53
+ [][] 
  []
 
 
 
 [1
 
-{/opt/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<figures/FMS.png, id=12, 449.42906pt x 417.05812pt>
-File: figures/FMS.png Graphic file (type png)
-<use figures/FMS.png>
-Package luatex.def Info: figures/FMS.png  used on input line 72.
-(luatex.def)             Requested size: 172.5pt x 160.07468pt.
-
-
-[2<./figures/FMS.png>]
-
-[3] (./report.aux)
+{/opt/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./report.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-03-26>
@@ -434,19 +417,19 @@ L3 programming layer <2025-03-26>
 )
 
 Here is how much of LuaTeX's memory you used:
- 7845 strings out of 471941
- 195333,953878 words of node,token memory allocated
+ 7455 strings out of 471941
+ 100000,662416 words of node,token memory allocated
  447 words of node memory still in use:
    4 hlist, 1 vlist, 1 rule, 4 glue, 3 kern, 1 glyph, 7 attribute, 50 glue_spec, 5 attribute_list, 1 write nodes
-   avail lists: 2:2578,3:110,4:3456,5:3358,6:76,7:5723,8:3,9:8488,10:28,11:307
- 34317 multiletter control sequences out of 65536+600000
- 59 fonts using 18340775 bytes
- 73i,6n,92p,835b,696s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/fonts/TTF/timesi.ttf></opt/texlive/2025/texmf-dist/fonts/opentype/public/lm/lmmono10-regular.otf></opt/texlive/2025/texmf-dist/fonts/opentype/public/lm/lmmono8-regular.otf></usr/share/fonts/TTF/timesbd.ttf></usr/share/fonts/TTF/times.ttf></opt/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></opt/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb>
-Output written on report.pdf (3 pages, 198052 bytes).
+   avail lists: 2:437,3:54,4:22,5:46,6:16,7:2314,8:1,9:248,10:6,11:38
+ 33944 multiletter control sequences out of 65536+600000
+ 54 fonts using 15960991 bytes
+ 73i,8n,92p,840b,267s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/fonts/TTF/timesbd.ttf></usr/share/fonts/TTF/times.ttf>
+Output written on report.pdf (1 page, 68628 bytes).
 
-PDF statistics: 58 PDF objects out of 1000 (max. 8388607)
- 34 compressed objects within 1 object stream
+PDF statistics: 22 PDF objects out of 1000 (max. 8388607)
+ 12 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 131072)
  1 words of extra memory for PDF output out of 10000 (max. 100000000)
 

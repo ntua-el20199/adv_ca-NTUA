@@ -38,7 +38,7 @@ for folder in "$inputBase"/*; do
             clean_cmd=$(echo "$line" | sed -n 's/.*\(\.\/.*\)/\1/p')
 
             # PIN output file
-            pinOutFile="$outDir/${BENCH}.cslab_branch_preds_train.out"
+            pinOutFile="$outDir/${BENCH}.cslab_branch_preds_ref.out"
 
             # Construct the complete PIN command.
             pin_cmd="$PIN_EXE -t $PIN_TOOL -o $pinOutFile -- $clean_cmd 1> stdout.log 2> stderr.log"

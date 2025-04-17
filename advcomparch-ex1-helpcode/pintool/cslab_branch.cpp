@@ -165,33 +165,33 @@ VOID InitPredictors()
 {
     // N-bit predictors
     
- //   // 16K
- //   for (int i=1; i <= 4; i++) {
- //       NbitPredictor *nbitPred = new NbitPredictor(14, i);
- //       branch_predictors.push_back(nbitPred);
- //   }
-
+//    // 16K
+//    for (int i=1; i <= 4; i++) {
+//        NbitPredictor *nbitPred = new NbitPredictor(14, i);
+//        branch_predictors.push_back(nbitPred);
+//    }
+//
 //    NbitPredictor *nbitPred = new NbitPredictor(14, 2);
 //    branch_predictors.push_back(nbitPred);
-//
-//    // Alternative FSMs
-//    TwobitPredictor_FSM1 *nbitPredFSM1 = new TwobitPredictor_FSM1();
-//    branch_predictors.push_back(nbitPredFSM1);
-//    TwobitPredictor_FSM2 *nbitPredFSM2 = new TwobitPredictor_FSM2();
-//    branch_predictors.push_back(nbitPredFSM2);
-//    TwobitPredictor_FSM3 *nbitPredFSM3 = new TwobitPredictor_FSM3();
-//    branch_predictors.push_back(nbitPredFSM3);
-//    TwobitPredictor_FSM4 *nbitPredFSM4 = new TwobitPredictor_FSM4();
-//    branch_predictors.push_back(nbitPredFSM4);
-//    TwobitPredictor_FSM5 *nbitPredFSM5 = new TwobitPredictor_FSM5();
-//    branch_predictors.push_back(nbitPredFSM5);
-//
-//    // 32K hardware
-//    NbitPredictor *onebitPred = new NbitPredictor(15, 1);
-//    branch_predictors.push_back(onebitPred);
-//    NbitPredictor *fourbitPred = new NbitPredictor(13, 4);
-//    branch_predictors.push_back(fourbitPred);    
-//    // Pentium-M predictor
+
+    // Alternative FSMs
+    TwobitPredictor_FSM1 *nbitPredFSM1 = new TwobitPredictor_FSM1();
+    branch_predictors.push_back(nbitPredFSM1);
+    TwobitPredictor_FSM2 *nbitPredFSM2 = new TwobitPredictor_FSM2();
+    branch_predictors.push_back(nbitPredFSM2);
+    TwobitPredictor_FSM3 *nbitPredFSM3 = new TwobitPredictor_FSM3();
+    branch_predictors.push_back(nbitPredFSM3);
+    TwobitPredictor_FSM4 *nbitPredFSM4 = new TwobitPredictor_FSM4();
+    branch_predictors.push_back(nbitPredFSM4);
+    TwobitPredictor_FSM5 *nbitPredFSM5 = new TwobitPredictor_FSM5();
+    branch_predictors.push_back(nbitPredFSM5);
+
+    // 32K hardware
+    NbitPredictor *onebitPred = new NbitPredictor(15, 1);
+    branch_predictors.push_back(onebitPred);
+    NbitPredictor *fourbitPred = new NbitPredictor(13, 4);
+    branch_predictors.push_back(fourbitPred);    
+    // Pentium-M predictor
 
 // 5_6
 
@@ -230,9 +230,9 @@ int main(int argc, char *argv[])
     outFile.open(KnobOutputFile.Value().c_str());
 
     // Initialize predictors and RAS vector
-    //InitPredictors();
+    InitPredictors();
     //BTB();
-    InitRas();
+    //InitRas();
 
     // Instrument function calls in order to catch __parsec_roi_{begin,end}
     INS_AddInstrumentFunction(Instruction, 0);

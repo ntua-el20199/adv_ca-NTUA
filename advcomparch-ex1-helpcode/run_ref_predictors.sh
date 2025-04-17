@@ -4,12 +4,12 @@
 # RUN TRAIN PREDICTORS
 
 # Absolute paths for PIN executable and tool:
-PIN_EXE="/home/harris/adv_ca-NTUA/pin/pin"
-PIN_TOOL="/home/harris/adv_ca-NTUA/advcomparch-ex1-helpcode/pintool/obj-intel64/cslab_branch.so"
+PIN_EXE="/home/harris/github_repos/adv_ca-NTUA/pin/pin"
+PIN_TOOL="/home/harris/github_repos/adv_ca-NTUA/advcomparch-ex1-helpcode/pintool/obj-intel64/cslab_branch.so"
 # Output directory for PIN's output -- BE CAREFUL! THE PATH NEEDS TO EXIST!!!
-outDir="/home/harris/adv_ca-NTUA/outputs/5_6_a"
+outDir="/home/harris/github_repos/adv_ca-NTUA/outputs/fake"
 # Base directory that contains all benchmark folders (This is the directory where all the benchmark folders are)
-inputBase="/home/harris/adv_ca-NTUA/advcomparch-ex1-helpcode/spec_execs_ref_inputs"
+inputBase="/home/harris/github_repos/adv_ca-NTUA/advcomparch-ex1-helpcode/spec_execs_ref_inputs"
 
 # Loop over every subfolder in the input base directory.
 # By uncommenting the respective lines below you can run either only one benchmark or all benchmarks inside a directory

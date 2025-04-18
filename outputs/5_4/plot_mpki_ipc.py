@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 ## For nbit predictors
-predictors_to_plot = [ "  BTB-" ]
+predictors_to_plot = [ "RAS" ]
 
 x_Axis = []
 mpki_Axis = []

@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.22.0 (TeX Live 2025)  (format=lualatex 2025.4.9)  18 APR 2025 15:35
+This is LuaHBTeX, Version 1.22.0 (TeX Live 2025)  (format=lualatex 2025.4.9)  18 APR 2025 16:12
  restricted system commands enabled.
  file:line:error style messages enabled.
 **/home/harris/github_repos/adv_ca-NTUA/report/report
@@ -962,28 +962,121 @@ Overfull \hbox (3.12665pt too wide) in paragraph at lines 910--911
 
 
 [17<./figures/5_4/geom_mean.png>]
+<figures/5_5/401.bzip2.cslab_branch_preds_ref.out.png, id=204, 424.2249pt x 324.4923pt>
+File: figures/5_5/401.bzip2.cslab_branch_preds_ref.out.png Graphic file (type png)
+<use figures/5_5/401.bzip2.cslab_branch_preds_ref.out.png>
+Package luatex.def Info: figures/5_5/401.bzip2.cslab_branch_preds_ref.out.png  used on input line 954.
+(luatex.def)             Requested size: 217.66211pt x 166.48904pt.
+<figures/5_5/403.gcc.cslab_branch_preds_ref.out.png, id=205, 409.7709pt x 324.4923pt>
+File: figures/5_5/403.gcc.cslab_branch_preds_ref.out.png Graphic file (type png)
+<use figures/5_5/403.gcc.cslab_branch_preds_ref.out.png>
+Package luatex.def Info: figures/5_5/403.gcc.cslab_branch_preds_ref.out.png  used on input line 960.
+(luatex.def)             Requested size: 217.66211pt x 172.36134pt.
+<figures/5_5/410.bwaves.cslab_branch_preds_ref.out.png, id=206, 424.2249pt x 324.4923pt>
+File: figures/5_5/410.bwaves.cslab_branch_preds_ref.out.png Graphic file (type png)
+<use figures/5_5/410.bwaves.cslab_branch_preds_ref.out.png>
+Package luatex.def Info: figures/5_5/410.bwaves.cslab_branch_preds_ref.out.png  used on input line 976.
+(luatex.def)             Requested size: 217.66211pt x 166.48904pt.
+<figures/5_5/416.gamess.cslab_branch_preds_ref.out.png, id=207, 424.2249pt x 324.4923pt>
+File: figures/5_5/416.gamess.cslab_branch_preds_ref.out.png Graphic file (type png)
+<use figures/5_5/416.gamess.cslab_branch_preds_ref.out.png>
+Package luatex.def Info: figures/5_5/416.gamess.cslab_branch_preds_ref.out.png  used on input line 982.
+(luatex.def)             Requested size: 217.66211pt x 166.48904pt.
+<figures/5_5/429.mcf.cslab_branch_preds_ref.out.png, id=208, 424.2249pt x 324.4923pt>
+File: figures/5_5/429.mcf.cslab_branch_preds_ref.out.png Graphic file (type png)
+<use figures/5_5/429.mcf.cslab_branch_preds_ref.out.png>
+Package luatex.def Info: figures/5_5/429.mcf.cslab_branch_preds_ref.out.png  used on input line 990.
+(luatex.def)             Requested size: 217.66211pt x 166.48904pt.
+<figures/5_5/433.milc.cslab_branch_preds_ref.out.png, id=209, 424.2249pt x 324.4923pt>
+File: figures/5_5/433.milc.cslab_branch_preds_ref.out.png Graphic file (type png)
+<use figures/5_5/433.milc.cslab_branch_preds_ref.out.png>
+Package luatex.def Info: figures/5_5/433.milc.cslab_branch_preds_ref.out.png  used on input line 996.
+(luatex.def)             Requested size: 217.66211pt x 166.48904pt.
+<figures/5_5/435.gromacs.cslab_branch_preds_ref.out.png, id=210, 409.7709pt x 324.4923pt>
+File: figures/5_5/435.gromacs.cslab_branch_preds_ref.out.png Graphic file (type png)
+<use figures/5_5/435.gromacs.cslab_branch_preds_ref.out.png>
+Package luatex.def Info: figures/5_5/435.gromacs.cslab_branch_preds_ref.out.png  used on input line 1004.
+(luatex.def)             Requested size: 217.66211pt x 172.36134pt.
+<figures/5_5/436.cactusADM.cslab_branch_preds_ref.out.png, id=211, 424.2249pt x 324.4923pt>
+File: figures/5_5/436.cactusADM.cslab_branch_preds_ref.out.png Graphic file (type png)
+<use figures/5_5/436.cactusADM.cslab_branch_preds_ref.out.png>
+Package luatex.def Info: figures/5_5/436.cactusADM.cslab_branch_preds_ref.out.png  used on input line 1010.
+(luatex.def)             Requested size: 217.66211pt x 166.48904pt.
 
-[18] (./report.aux)
+
+[18<./figures/5_5/401.bzip2.cslab_branch_preds_ref.out.png><./figures/5_5/403.gcc.cslab_branch_preds_ref.out.png>]
+<figures/5_5/437.leslie3d.cslab_branch_preds_ref.out.png, id=217, 424.2249pt x 324.4923pt>
+File: figures/5_5/437.leslie3d.cslab_branch_preds_ref.out.png Graphic file (type png)
+<use figures/5_5/437.leslie3d.cslab_branch_preds_ref.out.png>
+Package luatex.def Info: figures/5_5/437.leslie3d.cslab_branch_preds_ref.out.png  used on input line 1026.
+(luatex.def)             Requested size: 217.66211pt x 166.48904pt.
+<figures/5_5/450.soplex.cslab_branch_preds_ref.out.png, id=218, 424.2249pt x 324.4923pt>
+File: figures/5_5/450.soplex.cslab_branch_preds_ref.out.png Graphic file (type png)
+<use figures/5_5/450.soplex.cslab_branch_preds_ref.out.png>
+Package luatex.def Info: figures/5_5/450.soplex.cslab_branch_preds_ref.out.png  used on input line 1032.
+(luatex.def)             Requested size: 217.66211pt x 166.48904pt.
+<figures/5_5/456.hmmer.cslab_branch_preds_ref.out.png, id=219, 424.2249pt x 324.4923pt>
+File: figures/5_5/456.hmmer.cslab_branch_preds_ref.out.png Graphic file (type png)
+<use figures/5_5/456.hmmer.cslab_branch_preds_ref.out.png>
+Package luatex.def Info: figures/5_5/456.hmmer.cslab_branch_preds_ref.out.png  used on input line 1040.
+(luatex.def)             Requested size: 217.66211pt x 166.48904pt.
+<figures/5_5/459.GemsFDTD.cslab_branch_preds_ref.out.png, id=220, 424.2249pt x 324.4923pt>
+File: figures/5_5/459.GemsFDTD.cslab_branch_preds_ref.out.png Graphic file (type png)
+<use figures/5_5/459.GemsFDTD.cslab_branch_preds_ref.out.png>
+Package luatex.def Info: figures/5_5/459.GemsFDTD.cslab_branch_preds_ref.out.png  used on input line 1046.
+(luatex.def)             Requested size: 217.66211pt x 166.48904pt.
+<figures/5_5/464.h264ref.cslab_branch_preds_ref.out.png, id=221, 424.2249pt x 324.4923pt>
+File: figures/5_5/464.h264ref.cslab_branch_preds_ref.out.png Graphic file (type png)
+<use figures/5_5/464.h264ref.cslab_branch_preds_ref.out.png>
+Package luatex.def Info: figures/5_5/464.h264ref.cslab_branch_preds_ref.out.png  used on input line 1054.
+(luatex.def)             Requested size: 217.66211pt x 166.48904pt.
+<figures/5_5/470.lbm.cslab_branch_preds_ref.out.png, id=222, 424.2249pt x 324.4923pt>
+File: figures/5_5/470.lbm.cslab_branch_preds_ref.out.png Graphic file (type png)
+<use figures/5_5/470.lbm.cslab_branch_preds_ref.out.png>
+Package luatex.def Info: figures/5_5/470.lbm.cslab_branch_preds_ref.out.png  used on input line 1060.
+(luatex.def)             Requested size: 217.66211pt x 166.48904pt.
+
+
+[19<./figures/5_5/410.bwaves.cslab_branch_preds_ref.out.png><./figures/5_5/416.gamess.cslab_branch_preds_ref.out.png><./figures/5_5/429.mcf.cslab_branch_preds_ref.out.png><./figures/5_5/433.milc.cslab_branch_preds_ref.out.png><./figures/5_5/435.gromacs.cslab_branch_preds_ref.out.png><./figures/5_5/436.cactusADM.cslab_branch_preds_ref.out.png>]
+<figures/5_5/471.omnetpp.cslab_branch_preds_ref.out.png, id=232, 409.7709pt x 324.4923pt>
+File: figures/5_5/471.omnetpp.cslab_branch_preds_ref.out.png Graphic file (type png)
+<use figures/5_5/471.omnetpp.cslab_branch_preds_ref.out.png>
+Package luatex.def Info: figures/5_5/471.omnetpp.cslab_branch_preds_ref.out.png  used on input line 1076.
+(luatex.def)             Requested size: 217.66211pt x 172.36134pt.
+<figures/5_5/483.xalancbmk.cslab_branch_preds_ref.out.png, id=233, 416.2752pt x 324.4923pt>
+File: figures/5_5/483.xalancbmk.cslab_branch_preds_ref.out.png Graphic file (type png)
+<use figures/5_5/483.xalancbmk.cslab_branch_preds_ref.out.png>
+Package luatex.def Info: figures/5_5/483.xalancbmk.cslab_branch_preds_ref.out.png  used on input line 1082.
+(luatex.def)             Requested size: 217.66211pt x 169.67276pt.
+
+
+[20<./figures/5_5/437.leslie3d.cslab_branch_preds_ref.out.png><./figures/5_5/450.soplex.cslab_branch_preds_ref.out.png><./figures/5_5/456.hmmer.cslab_branch_preds_ref.out.png><./figures/5_5/459.GemsFDTD.cslab_branch_preds_ref.out.png><./figures/5_5/464.h264ref.cslab_branch_preds_ref.out.png><./figures/5_5/470.lbm.cslab_branch_preds_ref.out.png>]
+
+[21<./figures/5_5/471.omnetpp.cslab_branch_preds_ref.out.png><./figures/5_5/483.xalancbmk.cslab_branch_preds_ref.out.png>] (./report.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
 )
 
 Here is how much of LuaTeX's memory you used:
- 11438 strings out of 475506
+ 11634 strings out of 475506
  244185,953878 words of node,token memory allocated
  479 words of node memory still in use:
    4 hlist, 1 vlist, 1 rule, 4 glue, 3 kern, 1 glyph, 11 attribute, 54 glue_spec, 7 attribute_list, 1 write nodes
    avail lists: 2:2988,3:220,4:4184,5:4159,6:91,7:10329,8:20,9:10384,10:28,11:406
- 34056 multiletter control sequences out of 65536+600000
+ 34204 multiletter control sequences out of 65536+600000
  50 fonts using 17780647 bytes
  79i,14n,92p,1175b,702s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/fonts/TTF/timesi.ttf></usr/local/texlive/2025/texmf-dist/fonts/opentype/public/lm/lmmono10-regular.otf></usr/local/texlive/2025/texmf-dist/fonts/opentype/public/lm/lmmono8-regular.otf></usr/share/fonts/TTF/times.ttf></usr/share/fonts/TTF/timesbd.ttf></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on report.pdf (19 pages, 1705797 bytes).
+Output written on report.pdf (22 pages, 1885425 bytes).
 
-PDF statistics: 252 PDF objects out of 1000 (max. 8388607)
- 74 compressed objects within 1 object stream
+PDF statistics: 294 PDF objects out of 1000 (max. 8388607)
+ 81 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 131072)
  1 words of extra memory for PDF output out of 10000 (max. 100000000)
 

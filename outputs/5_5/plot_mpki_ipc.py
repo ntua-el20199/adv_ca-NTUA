@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 ## For nbit predictors
-predictors_to_plot = [ "  BTB-" ]
+predictors_to_plot = [ "RAS" ]
 
 x_Axis = []
 mpki_Axis = []
@@ -20,10 +20,12 @@ while line:
 		total_ins = int(tokens[2])
 	else:
 		for pred_prefix in predictors_to_plot:
-			if line.startswith(pred_prefix):
+			if line.startswith("RAS: "):
+				pass  # Placeholder for "RAS:" logic
+			elif line.startswith(pred_prefix):
 				predictor_string = tokens[0].split(':')[0]
-				correct_predictions = int(tokens[1])
-				incorrect_predictions = int(tokens[2])
+				correct_predictions = int(tokens[3])
+				incorrect_predictions = int(tokens[4])
 				x_Axis.append(predictor_string)
 				mpki_Axis.append(incorrect_predictions / (total_ins / 1000.0))
 

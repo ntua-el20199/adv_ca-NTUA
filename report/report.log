@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.22.0 (TeX Live 2025)  (format=lualatex 2025.4.9)  18 APR 2025 16:56
+This is LuaHBTeX, Version 1.22.0 (TeX Live 2025)  (format=lualatex 2025.4.9)  18 APR 2025 17:09
  restricted system commands enabled.
  file:line:error style messages enabled.
 **/home/harris/github_repos/adv_ca-NTUA/report/report
@@ -359,11 +359,7 @@ Package fontspec Info:
 (fontspec)             <->"name:Times New
 (fontspec)             Roman/BI:mode=node;script=latn;language=dflt;+tlig;+smcp;"
 
- (./report.aux
-
-LaTeX Warning: Label `fig:mean_mpkis_predictors' multiply defined.
-
-)
+ (./report.aux)
 \openout1 = report.aux
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 47.
@@ -1105,10 +1101,6 @@ Package luatex.def Info: figures/5_6/geom_mean.png  used on input line 1239.
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
-
-
-LaTeX Warning: There were multiply-defined labels.
-
 )
 
 Here is how much of LuaTeX's memory you used:

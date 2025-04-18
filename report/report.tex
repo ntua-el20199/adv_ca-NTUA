@@ -926,7 +926,7 @@ predictors, για Ν = 1, 2, 3, 4. Τα n-bits υλοποιούν ένα satura
 \vspace{0.3cm}
 \noindent \textbf{Τελική Επιλογή:} Το \textbf{BTB-256-4} αποτελεί την καλύτερη ισορροπία μεταξύ επίδοσης και κόστους υλοποίησης.
 
-\subsection{Μελέτη του RAS}
+\section{Μελέτη του RAS}
 Η \textbf{Return Address Stack (RAS)} είναι ένας εξειδικευμένος μηχανισμός πρόβλεψης διακλαδώσεων που χρησιμοποιείται για την πρόβλεψη διευθύνσεων επιστροφής από υπορουτίνες (function calls). Κάθε φορά που εκτελείται μία εντολή \texttt{call}, η διεύθυνση επιστροφής αποθηκεύεται στη στοίβα της RAS. Όταν αργότερα εκτελείται μία \texttt{return}, η προβλεπόμενη διεύθυνση λαμβάνεται από την κορυφή της στοίβας. Αυτός ο μηχανισμός είναι εξαιρετικά αποτελεσματικός, καθώς οι \texttt{return} εντολές εμφανίζονται συχνά και η αλληλουχία \texttt{call-return} διατηρείται κατά κανόνα με μεγάλη ακρίβεια.
 
 Η απόδοση της RAS επηρεάζεται κυρίως από το μέγεθός της, δηλαδή από τον αριθμό των διευθύνσεων που μπορεί να κρατήσει. Μια μικρή RAS μπορεί να "ξεχειλίσει" όταν υπάρχουν πολλές εμφωλευμένες κλήσεις (nested calls), οδηγώντας σε λάθος πρόβλεψη. Αντίθετα, μια πολύ μεγάλη RAS μπορεί να καταναλώνει περιττούς πόρους χωρίς σημαντική βελτίωση στην απόδοση.
@@ -1089,11 +1089,158 @@ predictors, για Ν = 1, 2, 3, 4. Τα n-bits υλοποιούν ένα satura
     \label{fig:ras_part4}
 \end{figure}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/5_5/geom_mean.png}
+    \caption{Geometric Mean MPKI for RAS predictors}
+    \label{fig:mean_mpkis_RASs}
+\end{figure}
 
+Τα αποτελέσματα δείχνουν ότι όσο αυξάνεται το μέγεθος της RAS, η απόδοση βελτιώνεται σημαντικά, μέχρι το σημείο όπου οι λανθασμένες προβλέψεις πρακτικά εκμηδενίζονται.
 
+\begin{itemize} \item Με 4 εγγραφές, παρατηρείται MPKI = 0.0024. \item Με 8 εγγραφές, η απόδοση βελτιώνεται δραματικά (MPKI = 0.0001). \item Από τις 16 εγγραφές και πάνω, η RAS έχει μηδενικό MPKI. \end{itemize}
 
+Αυτό υποδηλώνει ότι για το σύνολο εφαρμογών που χρησιμοποιείται, 16 εγγραφές επαρκούν ώστε να καλύψουν το βάθος των εμφωλευμένων \texttt{call-return} ζευγών χωρίς να παρατηρείται υπερχείλιση της στοίβας.
 
+\vspace{0.3cm} \textbf{Συμπέρασμα:}
 
+Η \textbf{RAS μεγέθους 16 εγγραφών} αποτελεί το ιδανικό σημείο ισορροπίας ανάμεσα σε απόδοση και κόστος υλοποίησης. Παρέχει \textbf{μηδενικές λανθασμένες προβλέψεις} και, συνεπώς, δεν υπάρχει πρακτικό όφελος από τη χρήση μεγαλύτερων διαμορφώσεων όπως 32, 48 ή 64 εγγραφές, καθώς δεν παρατηρείται επιπλέον βελτίωση. Από άποψης κόστους υλικού και ενεργειακής κατανάλωσης, η χρήση μιας περιττά μεγάλης RAS μπορεί να είναι αντιπαραγωγική.
 
+\section{Σύγκριση διαφορετικών predictors}
+
+\subsection*{Είδη Branch Predictors}
+
+\begin{itemize} \item \textbf{Static Always Taken:} Ένας απλός στατικός predictor που υποθέτει πάντα ότι το branch θα γίνει (θα είναι taken). Παρότι είναι απλός και δεν απαιτεί σχεδόν καθόλου hardware, η ακρίβειά του εξαρτάται έντονα από το είδος του κώδικα – είναι καλός όταν η πλειοψηφία των branches είναι taken.
+
+\item \textbf{Static BTFNT (Backward Taken, Forward Not Taken):}
+Ένας πιο "έξυπνος" στατικός predictor. Υποθέτει ότι τα backward branches (όπως οι βρόχοι) είναι taken και τα forward branches (όπως τα if-else) είναι not taken. Έχει μεγαλύτερη ακρίβεια από τον Always Taken σε πολλές περιπτώσεις, ειδικά σε βρόχους.
+
+\item \textbf{Local History Two-Level Predictors:}
+Οι τοπικοί history-based predictors χρησιμοποιούν έναν πίνακα ιστορικού (BHT) για κάθε branch, αποθηκεύοντας τη συμπεριφορά του συγκεκριμένου branch. Η ιστορία αυτή χρησιμοποιείται για την πρόσβαση σε έναν πίνακα προβλέψεων (PHT), βελτιώνοντας σημαντικά την ακρίβεια για branches με επαναλαμβανόμενα μοτίβα. Είναι πολύ αποτελεσματικοί για branches που εξαρτώνται από το δικό τους ιστορικό.
+
+\item \textbf{Global History Two-Level Predictors:}
+Αντί να αποθηκεύουν ιστορικό για κάθε branch ξεχωριστά, οι global predictors χρησιμοποιούν έναν κοινό καταχωρητή ιστορικού (Global History Register - BHR) που καταγράφει το μοτίβο εκτέλεσης όλων των πρόσφατων branches. Το global ιστορικό χρησιμοποιείται ως δείκτης στον πίνακα προβλέψεων. Είναι ιδιαίτερα χρήσιμοι για branches που εξαρτώνται από το αποτέλεσμα άλλων branches.
+
+\item \textbf{Alpha 21264 Predictor:}
+Ένας σύνθετος predictor που χρησιμοποιεί ταυτόχρονα local, global και choice predictors. Κάθε predictor δίνει τη δική του πρόβλεψη, και ένας meta-predictor επιλέγει ποια πρόβλεψη να εμπιστευθεί. Συνδυάζει τα πλεονεκτήματα των τοπικών και καθολικών predictors, προσφέροντας υψηλή ακρίβεια με σχετικά λογικό hardware overhead (29KB περίπου).
+
+\item \textbf{Tournament Hybrid Predictors:}
+Πρόκειται για γενικευμένη μορφή του Alpha 21264. Δύο ή περισσότεροι ανεξάρτητοι predictors (π.χ. ένας local και ένας global) λειτουργούν παράλληλα, και ένας meta-predictor αποφασίζει ποιον να εμπιστευθεί. Επιτρέπει μεγάλη ευελιξία και μπορεί να συνδυάσει οποιουσδήποτε τύπους predictors, π.χ. δύο global με διαφορετικά BHR μήκη. Προσφέρουν εξαιρετική ακρίβεια, ειδικά όταν οι συμμετέχοντες predictors εξειδικεύονται σε διαφορετικά μοτίβα branches.
+\end{itemize}
+
+Καλούμε τους εξής constructors:
+
+\begin{lstlisting}[style=cppstyle]
+    branch_predictors.push_back(new AlwaysTakenPredictor());
+    
+    // 2) BTFNT
+    branch_predictors.push_back(new BTFNTPredictor());
+    
+    // 3) n-bit predictor
+    NbitPredictor *fourbitPred = new NbitPredictor(13, 4);
+    branch_predictors.push_back(fourbitPred);
+    // 4) Pentium-M 
+    branch_predictors.push_back(new PentiumMBranchPredictor());    
+
+    // 5, 6, 7) Local History Two Level
+    branch_predictors.push_back(new LocalHistoryPredictor(11, 8));
+    branch_predictors.push_back(new LocalHistoryPredictor(12, 4));
+    branch_predictors.push_back(new LocalHistoryPredictor(13, 2));
+
+    // 8, 9) Global History Two Level
+    branch_predictors.push_back(new GlobalHistoryPredictor(14, 2));
+    branch_predictors.push_back(new GlobalHistoryPredictor(13, 4));
+    
+    // 10) Alpha21264
+    branch_predictors.push_back(new Alpha21264());
+    
+    // 11, ..., 16) Tournament Hybrid Predictors
+    branch_predictors.push_back(new TournamentHybridPredictor(10, 
+	new NbitPredictor(13, 2), // 8K entries, 2bit predictor
+	new NbitPredictor(12, 4)  // 4K entries, 4bit predictor
+    ));
+    branch_predictors.push_back(new TournamentHybridPredictor(11,
+	new NbitPredictor(13, 2), // 8K entries, 2bit predictor
+	new GlobalHistoryPredictor(13, 2) // 8K entries, 2bit global history predictor
+    ));
+    branch_predictors.push_back(new TournamentHybridPredictor(11,
+	new NbitPredictor(13, 2), // 8K entries, 2bit predictor
+	new LocalHistoryPredictor(12, 2, 12, 2) // local history predictor, BHT and PHT:4K entries 2bit each
+    ));
+    branch_predictors.push_back(new TournamentHybridPredictor(11,
+	new LocalHistoryPredictor(12, 2, 12, 2),
+	new GlobalHistoryPredictor(13, 2)
+    ));
+    branch_predictors.push_back(new TournamentHybridPredictor(11,
+	new GlobalHistoryPredictor(13, 2),
+	new GlobalHistoryPredictor(12, 4) // 4K entries, 4bit global history predictor
+    ));
+    branch_predictors.push_back(new TournamentHybridPredictor(11,
+	new LocalHistoryPredictor(12, 2, 12, 2),
+	new LocalHistoryPredictor(11, 4, 12, 2) // local history predictor,BHT:2K entries,4bit,PHT:4K entries,2bit
+    ));
+\end{lstlisting}
+
+Για λόγους απλότητας, παραλείπονται οι υλοποιήσεις και τα αναλυτικά διαγράμματα των predictors.
+Παρατίθεται το τελικό διάγραμμα με τις επιδόσεις των predictors:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/5_6/geom_mean.png}
+    \caption{Geometric Mean MPKI for different predictors}
+    \label{fig:mean_mpkis_predictors}
+\end{figure}
+
+\pagebreak
+
+Στον Πίνακα παρουσιάζονται τα αποτελέσματα της σύγκρισης των διαφόρων branch predictors.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|}
+        \hline
+        \textbf{Predictor} & \textbf{MPKI} \\
+        \hline
+        Always Taken (AT) & 20.5 \\
+        Static BTFNT & 8.0 \\
+        Nbit-8K-4 & 3.0 \\
+        Pentium-M & 3.2 \\
+        Local History 2K-8 & \textbf{1.0} \\
+        Local History 4K-4 & 1.3 \\
+        Local History 8K-2 & 2.0 \\
+        Global History 16K-2 & 2.5 \\
+        Global History 8K-4 & 2.25 \\
+        Alpha 21264 & 4.2 \\
+        \hline
+    \end{tabular}
+    \caption{Σύγκριση απόδοσης διαφορετικών branch predictors (MPKI)}
+    \label{tab:predictor_comparison}
+\end{table}
+
+Από τα αποτελέσματα παρατηρούμε ότι οι \textbf{Local History two-level predictors} υπερτερούν των υπολοίπων, παρουσιάζοντας τις χαμηλότερες τιμές MPKI. Συγκεκριμένα, ο \textbf{Local History 2K-8} predictor παρουσιάζει την \textbf{καλύτερη επίδοση} με MPKI ίσο με 1.0.
+
+Λαμβάνοντας υπόψη ότι όλοι οι predictors σχεδιάστηκαν ώστε να έχουν \textbf{παρόμοιο hardware overhead (32Κ)}, ο Local History 2K-8 αποτελεί την προτιμώμενη επιλογή, προσφέροντας την καλύτερη σχέση απόδοσης/κόστους. 
+
+Αν παρ' όλα αυτά η χρήση μεγάλου μήκους ιστορικού (Ζ = 8) θεωρηθεί μη επιθυμητή (π.χ. λόγω αυξημένης πολυπλοκότητας ή καθυστέρησης), ο \textbf{Local History 4K-4} αποτελεί μια εξαιρετική εναλλακτική με πολύ κοντινή απόδοση (MPKI = 1.3) και μικρότερο μήκος ιστορικού.
+
+\bigskip
+Συμπερασματικά, ο Local History 2K-8 αποτελεί την πλέον \textbf{αποδοτική και ισορροπημένη επιλογή} μεταξύ απόδοσης και υλοποιησιμότητας.
+
+\section{Ακρίβεια προσομοιώσεων}
+
+Στο σημείο αυτό, διερευνούμε κατά πόσο η χρήση των \texttt{train} inputs αντί των \texttt{ref} επηρεάζει τα συμπεράσματα που εξάγονται από τις προσομοιώσεις των branch predictors.
+
+Χρησιμοποιούμε το ίδιο σύνολο από 16 predictors όπως στο Ερώτημα 5.6, το οποίο περιλαμβάνει τόσο στατικούς όσο και δυναμικούς predictors, καθώς και σύνθετους υβριδικούς predictors όπως ο Alpha 21264. Η σύγκριση εστιάζει κυρίως στο κατά πόσο η \textbf{σχετική κατάταξη των predictors} με βάση την απόδοσή τους (MPKI) παραμένει σταθερή όταν αλλάζει το input set.
+
+Παρατίθεται το τελικό διάγραμμα με τις επιδόσεις των predictors:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/5_6/geom_mean.png}
+    \caption{Geometric Mean MPKI for different predictors}
+    \label{fig:mean_mpkis_predictors}
+\end{figure}
+
+Φαίνεται ότι η \textbf{σχετική κατάταξη των predictors} παραμένει σταθερή, με τον Local History 2K-8 να διατηρεί την καλύτερη απόδοση (MPKI = 1.0) και τους υπόλοιπους predictors να ακολουθούν σε παρόμοια σειρά.
 
 \end{document}

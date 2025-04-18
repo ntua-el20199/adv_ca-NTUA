@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.22.0 (TeX Live 2025)  (format=lualatex 2025.4.9)  18 APR 2025 16:55
+This is LuaHBTeX, Version 1.22.0 (TeX Live 2025)  (format=lualatex 2025.4.9)  18 APR 2025 16:56
  restricted system commands enabled.
  file:line:error style messages enabled.
 **/home/harris/github_repos/adv_ca-NTUA/report/report
@@ -359,7 +359,11 @@ Package fontspec Info:
 (fontspec)             <->"name:Times New
 (fontspec)             Roman/BI:mode=node;script=latn;language=dflt;+tlig;+smcp;"
 
- (./report.aux)
+ (./report.aux
+
+LaTeX Warning: Label `fig:mean_mpkis_predictors' multiply defined.
+
+)
 \openout1 = report.aux
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 47.
@@ -1103,17 +1107,17 @@ L3 programming layer <2025-01-18>
  ***********
 
 
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+LaTeX Warning: There were multiply-defined labels.
 
 )
 
 Here is how much of LuaTeX's memory you used:
- 11677 strings out of 475506
+ 11678 strings out of 475506
  381556,953878 words of node,token memory allocated
  479 words of node memory still in use:
    4 hlist, 1 vlist, 1 rule, 4 glue, 3 kern, 1 glyph, 11 attribute, 54 glue_spec, 7 attribute_list, 1 write nodes
    avail lists: 1:1,2:4332,3:220,4:6804,5:6286,6:91,7:13483,8:20,9:15614,10:33,11:598
- 34238 multiletter control sequences out of 65536+600000
+ 34239 multiletter control sequences out of 65536+600000
  51 fonts using 18553775 bytes
  79i,14n,92p,1175b,702s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/fonts/TTF/timesi.ttf></usr/local/texlive/2025/texmf-dist/fonts/opentype/public/lm/lmmono10-regular.otf></usr/local/texlive/2025/texmf-dist/fonts/opentype/public/lm/lmmono8-regular.otf></usr/share/fonts/TTF/times.ttf></usr/share/fonts/TTF/timesbd.ttf></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>

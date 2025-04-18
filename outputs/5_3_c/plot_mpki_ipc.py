@@ -7,10 +7,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Desired order
-desired_order = ["FSM1_16K-2", "FSM2_16K-2", "FSM3_16K-2", "FSM4_16K-2", "FSM5_16K-2"]
+desired_order = ["FSM1_16K-2", "FSM2_16K-2", "FSM3_16K-2", "FSM4_16K-2", "FSM5_16K-2", "Nbit-32K-1", "Nbit-8K-4" ]
 
 # Predictor prefix to look for
-predictors_to_plot = [ "FSM" ]
+predictors_to_plot = [ "FSM", "Nbit" ]
 
 
 # Data collection

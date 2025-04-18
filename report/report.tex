@@ -169,7 +169,7 @@
     \hline
     471.omnetpp &  137784824709 & 29163496937 & 63903123884 & 11932487679 & 16392858237 & 16392857972 \\
     \hline
-    287764730034 & 75393414336 & 162510582834 & 8390230048 & 20735251410 & 20735251406 \\
+    483.xalancbmk & 287764730034 & 75393414336 & 162510582834 & 8390230048 & 20735251410 & 20735251406 \\
     \hline
 
 \end{tabular}
@@ -337,12 +337,377 @@ predictors, για Ν = 1, 2, 3, 4. Τα n-bits υλοποιούν ένα satura
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.55\textwidth]{figures/5_3/predictor_geometric_means.png}
-    \caption{Mean MPKI for N-bit predictors}
+    \includegraphics[width=0.65\textwidth]{figures/5_3/geom_mean.png}
+    \caption{Geometric Mean MPKI for N-bit predictors}
     \label{fig:mean_mpkis}
 \end{figure}
 
-Φαίνεται, λοιπόν, από τα αποτελέσματα πως ο Nbit-16K-1 predictor έχει με διαφορά το μεγαλύτερο MPKI, με τους άλλους τρεις να κυμαίνονται σε παρόμοια επίπεδα. Θα επιλέξουμε, τον Nbit-16K-2 καθώς παρουσιάζει καλές επιδόσεις, ενώ παράλληλα κρατάει χαμηλά τις απαιτήσεις για επιπλέον υλικό (overhead).
+Παρατηρούμε από τα αποτελέσματα ότι ο Nbit-16K-1 predictor παρουσιάζει με διαφορά το υψηλότερο MPKI (3.90), ενώ οι υπόλοιποι τρεις (Nbit-16K-2, 3 και 4) κινούνται σε παρόμοια επίπεδα απόδοσης (2.60, 2.48 και 2.55 αντίστοιχα).
+
+Επιλέγουμε τον \textbf{Nbit-16K-2}, καθώς προσφέρει ικανοποιητικές επιδόσεις με \textbf{χαμηλές απαιτήσεις σε επιπλέον υλικό (overhead)}. Αν και οι Nbit-16K-3 και Nbit-16K-4 εμφανίζουν ελαφρώς καλύτερο MPKI, η διαφορά είναι μικρή και δεν δικαιολογεί την αυξημένη πολυπλοκότητα.
+
+\subsection{}
+ Από το paper \textit{“Optimal 2-Bit Branch Predictors”} (R. Nair, 1995) βλέπουμε τα εξής πιθανά FSM:
+
+ \begin{figure}[h!]
+     \centering
+     \includegraphics[width=0.5\linewidth]{figures/FMS.png}
+     \caption{FSMs according to R. Nair.}
+     \label{fig:enter-label}
+ \end{figure}
+
+ όπου με \textbf{bold} απεικονίζονται οι μεταβάσεις μετά από σωστή πρόβλεψη και \texttt{dotted} οι μεταβάσεις ύστερα από αποτυχημένη.
+
+ Βασιζόμενοι σε αυτά τα διαγράμματα δημιουργούμε τους αντίστοιχους predictors στο αρχείο branch\_predictor.h:
+ \begin{lstlisting}[style=cppstyle]
+ class TwobitPredictor_FSM2 : public BranchPredictor
+ {
+ public:
+     TwobitPredictor_FSM2(unsigned index_bits_ = 14, unsigned cntr_bits_ = 2)
+     \\same as before ...
+
+     virtual void update(bool predicted, bool actual, ADDRINT ip, ADDRINT target) {
+         unsigned int ip_table_index = ip % table_entries;
+         if (actual) {
+             if (TABLE[ip_table_index] < COUNTER_MAX)
+                 TABLE[ip_table_index]++;
+         } else {
+             if (TABLE[ip_table_index] == 2)
+                 TABLE[ip_table_index] -= 2;
+             else if (TABLE[ip_table_index] > 0)
+                 TABLE[ip_table_index]--;
+         }
+
+         updateCounters(predicted, actual);
+     };
+ \end{lstlisting}
+ Κατά αντίστοιχο τρόπο κατασκευάζουμε και τις υπόλοιπες κλάσεις τις οποίες μετά καλούμε στο cslab\_branch.cpp
+
+ \begin{lstlisting}[style=cppstyle]
+ new TwobitPredictor_FSM1();
+ new TwobitPredictor_FSM2();
+ new TwobitPredictor_FSM3();
+ new TwobitPredictor_FSM4();
+ new TwobitPredictor_FSM5();
+ \end{lstlisting}
+
+ \pagebreak
+ Καταλήγουμε, λοιπόν, με τα εξής διαγραμμάτα:
+ 
+ \begin{figure}[H]
+     \centering
+ 
+     \begin{subfigure}[b]{0.45\textwidth}
+         \includegraphics[width=\textwidth]{figures/5_3_b/401.bzip2.cslab_branch_preds_ref.out.png}
+         \caption{401.bzip2}
+         \label{fig:plot17}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \includegraphics[width=\textwidth]{figures/5_3_b/403.gcc.cslab_branch_preds_ref.out.png}
+         \caption{403.gcc}
+         \label{fig:plot18}
+     \end{subfigure}
+ 
+     \vspace{0.5cm} % spacing between rows
+ 
+     \begin{subfigure}[b]{0.45\textwidth}
+         \includegraphics[width=\textwidth]{figures/5_3_b/410.bwaves.cslab_branch_preds_ref.out.png}
+         \caption{410.bwaves}
+         \label{fig:plot19}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \includegraphics[width=\textwidth]{figures/5_3_b/416.gamess.cslab_branch_preds_ref.out.png}
+         \caption{416.gamess}
+         \label{fig:plot20}
+     \end{subfigure}
+ 
+     \vspace{0.5cm} % spacing between rows
+ 
+     \begin{subfigure}[b]{0.45\textwidth}
+         \includegraphics[width=\textwidth]{figures/5_3_b/429.mcf.cslab_branch_preds_ref.out.png}
+         \caption{429.mcf}
+         \label{fig:plot21}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \includegraphics[width=\textwidth]{figures/5_3_b/433.milc.cslab_branch_preds_ref.out.png}
+         \caption{433.milc}
+         \label{fig:plot22}
+     \end{subfigure}
+     \vspace{0.5cm} 
+ 
+     \caption{Branch Prediction Accuracy for Different N-bit Predictors}
+     \label{fig:fsm}
+ \end{figure}
+ 
+ \begin{figure}[H]
+     \ContinuedFloat
+     \centering
+ 
+     \begin{subfigure}[b]{0.45\textwidth}
+         \includegraphics[width=\textwidth]{figures/5_3_b/435.gromacs.cslab_branch_preds_ref.out.png}
+         \caption{435.gromacs}
+         \label{fig:plot23}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \includegraphics[width=\textwidth]{figures/5_3_b/436.cactusADM.cslab_branch_preds_ref.out.png}
+         \caption{436.cactusADM}
+         \label{fig:plot24}
+     \end{subfigure}
+ 
+     \vspace{0.5cm} % spacing between rows
+ 
+     \begin{subfigure}[b]{0.45\textwidth}
+         \includegraphics[width=\textwidth]{figures/5_3_b/437.leslie3d.cslab_branch_preds_ref.out.png}
+         \caption{437.leslie3d}
+         \label{fig:plot25}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \includegraphics[width=\textwidth]{figures/5_3_b/450.soplex.cslab_branch_preds_ref.out.png}
+         \caption{450.soplex}
+         \label{fig:plot26}
+     \end{subfigure}
+ 
+     \vspace{0.5cm} % spacing between rows
+ 
+     \begin{subfigure}[b]{0.45\textwidth}
+         \includegraphics[width=\textwidth]{figures/5_3_b/456.hmmer.cslab_branch_preds_ref.out.png}
+         \caption{456.hmmer}
+         \label{fig:plot27}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \includegraphics[width=\textwidth]{figures/5_3_b/459.GemsFDTD.cslab_branch_preds_ref.out.png}
+         \caption{459.GemsFDTD}
+         \label{fig:plot28}
+     \end{subfigure}
+     \vspace{0.5cm} 
+ 
+     \caption{(continued)}
+     \label{fig:fsm_part2}
+ \end{figure}
+ 
+ \begin{figure}[H]
+     \ContinuedFloat
+     \centering
+ 
+     \begin{subfigure}[b]{0.45\textwidth}
+         \includegraphics[width=\textwidth]{figures/5_3_b/464.h264ref.cslab_branch_preds_ref.out.png}
+         \caption{464.h264ref}
+         \label{fig:plot29}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \includegraphics[width=\textwidth]{figures/5_3_b/470.lbm.cslab_branch_preds_ref.out.png}
+         \caption{470.lbm}
+         \label{fig:plot30}
+     \end{subfigure}
+ 
+     \vspace{0.5cm} % spacing between rows
+ 
+     \begin{subfigure}[b]{0.45\textwidth}
+         \includegraphics[width=\textwidth]{figures/5_3_b/471.omnetpp.cslab_branch_preds_ref.out.png}
+         \caption{471.omnetpp}
+         \label{fig:plot31}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \includegraphics[width=\textwidth]{figures/5_3_b/483.xalancbmk.cslab_branch_preds_ref.out.png}
+         \caption{483.xalancbmk}
+         \label{fig:plot32}
+     \end{subfigure}
+ 
+     \vspace{0.5cm} 
+ 
+     \caption{(continued)}
+     \label{fig:fsm_part3}
+ \end{figure}
 
 
-\end{document}
+ Υπολογίζουμε τον γεωμετρικό μέσο όρο του MPKI για κάθε benchmark και για κάθε FSM model. 
+
+ \begin{figure}[H]
+     \centering
+     \includegraphics[width=0.65\textwidth]{figures/5_3_b/geom_mean.png}
+     \caption{Geometric Mean MPKI for 16K-2 FSM models.}
+     \label{fig:mean_mpkis_FSMs}
+ \end{figure}
+
+ Επιλέγουμε και πάλι τον απλό \textbf{Nbit-16K-2} predictor με \textbf{FSM1}, καθώς προσφέρει τις \textbf{βέλτιστες επιδόσεις} μεταξύ των εξεταζόμενων FSM και υλοποιείται με σχετικά απλό τρόπο, χρησιμοποιώντας έναν απλό saturating up-down counter.
+
+ \subsection{}
+ Προκειμένου να ορίσουμε το διαθέσιμο \textbf{hardware σε 32K bits}, θα πρέπει να ικανοποιείται η σχέση:
+ \[
+ \texttt{index\_bits} \times \texttt{cntr\_bits} = 32K
+ \]
+ Συνεπώς, τα δυνατά ζεύγη τιμών είναι:
+ \[
+ (15, 1),\quad (14, 2),\quad (13, 3)
+ \]
+ όπου το πρώτο στοιχείο κάθε ζεύγους αντιστοιχεί στον αριθμό των index bits και το δεύτερο στον αριθμό των bits του καταχωρητή (counter). Καλούμε, λοιπόν, τους εξής constructors στο cslab\_branch.cpp:
+
+
+ \begin{lstlisting}[style=cppstyle]
+     // 32K hardware
+     new TwobitPredictor_FSM1();
+     new TwobitPredictor_FSM2();
+     new TwobitPredictor_FSM3();
+     new TwobitPredictor_FSM4();
+     new TwobitPredictor_FSM5();
+
+     new NbitPredictor(15, 1);
+     new NbitPredictor(13, 4);
+ \end{lstlisting}
+
+Και καταλήγουμε με τα εξής διαγράμματα:
+
+\begin{figure}[H]
+    \centering
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_3_c/401.bzip2.cslab_branch_preds_ref.out.png}
+        \caption{401.bzip2}
+        \label{fig:plot33}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_3_c/403.gcc.cslab_branch_preds_ref.out.png}
+        \caption{403.gcc}
+        \label{fig:plot34}
+    \end{subfigure}
+
+    \vspace{0.5cm} % spacing between rows
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_3_c/410.bwaves.cslab_branch_preds_ref.out.png}
+        \caption{410.bwaves}
+        \label{fig:plot35}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_3_c/416.gamess.cslab_branch_preds_ref.out.png}
+        \caption{416.gamess}
+        \label{fig:plot36}
+    \end{subfigure}
+
+    \vspace{0.5cm} % spacing between rows
+
+    \caption{Branch Prediction Accuracy for Different 32K Predictors}
+    \label{fig:32K}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \ContinuedFloat
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_3_c/429.mcf.cslab_branch_preds_ref.out.png}
+        \caption{429.mcf}
+        \label{fig:plot37}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_3_c/433.milc.cslab_branch_preds_ref.out.png}
+        \caption{433.milc}
+        \label{fig:plot38}
+    \end{subfigure}
+
+    \vspace{0.5cm} % spacing between rows
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_3_c/435.gromacs.cslab_branch_preds_ref.out.png}
+        \caption{435.gromacs}
+        \label{fig:plot39}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_3_c/436.cactusADM.cslab_branch_preds_ref.out.png}
+        \caption{436.cactusADM}
+        \label{fig:plot40}
+    \end{subfigure}
+
+    \vspace{0.5cm} % spacing between rows
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_3_c/437.leslie3d.cslab_branch_preds_ref.out.png}
+        \caption{437.leslie3d}
+        \label{fig:plot41}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_3_c/450.soplex.cslab_branch_preds_ref.out.png}
+        \caption{450.soplex}
+        \label{fig:plot42}       
+    \end{subfigure}
+    \vspace{0.5cm} 
+ 
+    \caption{(continued)}
+    \label{fig:32K_part2}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \ContinuedFloat
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_3_c/456.hmmer.cslab_branch_preds_ref.out.png}
+        \caption{456.hmmer}
+        \label{fig:plot43}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_3_c/459.GemsFDTD.cslab_branch_preds_ref.out.png}
+        \caption{459.GemsFDTD}
+        \label{fig:plot44}
+    \end{subfigure}
+
+    \vspace{0.5cm} % spacing between rows
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_3_c/464.h264ref.cslab_branch_preds_ref.out.png}
+        \caption{464.h264ref}
+        \label{fig:plot45}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_3_c/470.lbm.cslab_branch_preds_ref.out.png}
+        \caption{470.lbm}
+        \label{fig:plot46}
+    \end{subfigure}
+
+    \vspace{0.5cm} % spacing between rows
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_3_c/471.omnetpp.cslab_branch_preds_ref.out.png}
+        \caption{471.omnetpp}
+        \label{fig:plot47}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_3_c/483.xalancbmk.cslab_branch_preds_ref.out.png}
+        \caption{483.xalancbmk}
+        \label{fig:plot48}        
+    \end{subfigure}
+    \vspace{0.5cm}
+
+    \caption{(continued)}
+    \label{fig:32K_part3}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+ \end{document}

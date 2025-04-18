@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import sys
 import matplotlib.pyplot as plt
 import numpy as np
@@ -33,7 +35,7 @@ if __name__ == "__main__":
     plt.xlabel("Prediction Model")
     plt.ylabel("Mean MPKI")
     plt.title("")
-    plt.xticks(rotation=45, ha='right') # Rotate labels if they overlap
+    plt.xticks(rotation=45, ha='right', fontsize=12) # Rotate labels if they overlap
     plt.tight_layout() # Adjust layout to prevent labels overlapping
 
     # Save the plot to a file instead of displaying it

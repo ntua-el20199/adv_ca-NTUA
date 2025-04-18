@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 ## For nbit predictors
-predictors_to_plot = [ "  Nbit-16K-" ]
+predictors_to_plot = [ "  BTB-" ]
 
 x_Axis = []
 mpki_Axis = []
@@ -41,4 +41,4 @@ ax1.set_ylabel("$MPKI$")
 line1 = ax1.plot(mpki_Axis, label="mpki", color="red",marker='x')
 
 plt.title("MPKI")
-plt.savefig(input("Please provide a filename for the produced file (e.g. output.png): "),bbox_inches="tight")
+plt.savefig(sys.argv[1] + ".png",bbox_inches="tight")

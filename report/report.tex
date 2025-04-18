@@ -698,16 +698,251 @@ predictors, για Ν = 1, 2, 3, 4. Τα n-bits υλοποιούν ένα satura
     \label{fig:32K_part3}
 \end{figure}
 
+\pagebreak
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/5_3_c/geom_mean.png}
+    \caption{Geometric Mean MPKI for 32K predictors}
+    \label{fig:mean_mpkis_32K}
+\end{figure}
 
+Συνοψίζοντας, μεταξύ των εξεταζόμενων \textbf{Nbit predictors} με ίδιο συνολικό αποτύπωμα υλικού (\textbf{32K bits}), ο \textbf{Nbit-8K-4} παρουσιάζει τις \textbf{καλύτερες επιδόσεις} σε όρους MPKI, ξεπερνώντας ελαφρώς τον Nbit-16K-2. Επιπλέον, λόγω του μικρότερου αριθμού entries, προσφέρει και \textbf{μειωμένο latency}, γεγονός που τον καθιστά ταχύτερο στην πράξη. Αντιθέτως, ο Nbit-16K-2 εμφανίζει ελαφρώς \textbf{μικρότερη δυναμική κατανάλωση}, λόγω μικρότερου πλήθους toggled bits ανά update, όμως η διαφορά αυτή είναι περιορισμένη. Συνεπώς, για ένα σύστημα όπου προτεραιότητα έχουν οι επιδόσεις και η ταχύτητα, ο \textbf{Nbit-8K-4} αποτελεί την καταλληλότερη επιλογή.
 
+\section{Μελέτη του ΒΤΒ}
+\subsection*{BTB Predictors}
 
+Οι BTB (Branch Target Buffer) predictors χρησιμοποιούνται για την πρόβλεψη του \textbf{διευθυνσιοδοτούμενου στόχου} (target address) ενός branch, σε περιπτώσεις όπου προβλέπεται ότι το branch θα εκτελεστεί (taken). Αντίθετα με τους κλασικούς branch predictors που απλώς αποφασίζουν αν το branch θα γίνει ή όχι, το BTB στοχεύει στο να επιταχύνει τη ροή εντολών προβλέποντας έγκαιρα \textbf{πού} θα μεταφερθεί ο έλεγχος.
 
+Ένα BTB αποτελείται από έναν πίνακα εγγραφών (entries), όπου κάθε εγγραφή περιλαμβάνει:
+\begin{itemize}
+    \item Τη διεύθυνση της branch εντολής (PC),
+    \item Την προβλεπόμενη διεύθυνση στόχου (target address),
+    \item Ενδεχομένως metadata όπως valid bits ή ιστορικά στοιχεία.
+\end{itemize}
 
+Κατά την προσπέλαση, το BTB αναζητά μια αντιστοιχία μεταξύ της τρέχουσας διεύθυνσης εντολής και των αποθηκευμένων PC. Αν βρεθεί τέτοια εγγραφή και η πρόβλεψη είναι taken, τότε το pipeline μπορεί να προφορτώσει το target address χωρίς καθυστέρηση, μειώνοντας σημαντικά τα \textbf{penalties από mispredicted branches}.
 
+Θα εξετάσουμε τις εξής περιπτώσεις BTB predictors:
 
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+    \hline
+    \textbf{BTB Entries} & \textbf{BTB Associativity} \\
+    \hline
+    512 & 1, 2 \\
+    \hline
+    256 & 2, 4 \\
+    \hline
+    128 & 2, 4 \\
+    \hline
+    64  & 4, 8 \\
+    \hline
+    \end{tabular}
+    \caption{BTB Configurations (Entries and Associativity)}
+    \label{table:btb_configs}
+\end{table}
 
+Η υλοποίηση παραλείπεται για λόγους συντομίας.
+Καλούμε τους παρακάτω BTB predictors στο cslab\_branch.cpp:
+\begin{lstlisting}[style=cppstyle]
+    VOID BTB()
+    {
+        btb_predictors.push_back(new BTBPredictor(512, 1));
+        btb_predictors.push_back(new BTBPredictor(512, 2));
+        btb_predictors.push_back(new BTBPredictor(256, 2));
+        btb_predictors.push_back(new BTBPredictor(256, 4));
+        btb_predictors.push_back(new BTBPredictor(128, 2));
+        btb_predictors.push_back(new BTBPredictor(128, 4));
+        btb_predictors.push_back(new BTBPredictor(64, 4));
+        btb_predictors.push_back(new BTBPredictor(64, 8));
+    }
+\end{lstlisting}
 
+Και καταλήγουμε με τα εξής διαγράμματα:
+\begin{figure}[H]
+    \centering
 
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_4/401.bzip2.cslab_branch_preds_ref.out.png}
+        \caption{401.bzip2}
+        \label{fig:plot49}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_4/403.gcc.cslab_branch_preds_ref.out.png}
+        \caption{403.gcc}
+        \label{fig:plot50}
+    \end{subfigure}
 
- \end{document}
+    \vspace{0.5cm} % spacing between rows
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_4/410.bwaves.cslab_branch_preds_ref.out.png}
+        \caption{410.bwaves}
+        \label{fig:plot51}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_4/416.gamess.cslab_branch_preds_ref.out.png}
+        \caption{416.gamess}
+        \label{fig:plot52}
+    \end{subfigure}
+
+    \vspace{0.5cm} % spacing between rows
+
+    \caption{BTB Predictors Accuracy for Different Configurations}
+    \label{fig:btb}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \ContinuedFloat
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_4/429.mcf.cslab_branch_preds_ref.out.png}
+        \caption{429.mcf}
+        \label{fig:plot53}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_4/433.milc.cslab_branch_preds_ref.out.png}
+        \caption{433.milc}
+        \label{fig:plot54}
+    \end{subfigure}
+
+    \vspace{0.5cm} % spacing between rows
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_3/435.gromacs.cslab_branch_preds_ref.out.png}
+        \caption{435.gromacs}
+        \label{fig:plot55}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_4/436.cactusADM.cslab_branch_preds_ref.out.png}
+        \caption{436.cactusADM}
+        \label{fig:plot56}
+    \end{subfigure}
+
+    \vspace{0.5cm} % spacing between rows
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_4/437.leslie3d.cslab_branch_preds_ref.out.png}
+        \caption{437.leslie3d}
+        \label{fig:plot57}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_4/450.soplex.cslab_branch_preds_ref.out.png}
+        \caption{450.soplex}
+        \label{fig:plot58}
+    \end{subfigure}
+    
+    \vspace{0.5cm} % spacing between rows
+
+    \caption{(continued)}
+    \label{fig:btb_part2}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \ContinuedFloat
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_4/456.hmmer.cslab_branch_preds_ref.out.png}
+        \caption{456.hmmer}
+        \label{fig:plot59}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_4/459.GemsFDTD.cslab_branch_preds_ref.out.png}
+        \caption{459.GemsFDTD}
+        \label{fig:plot60}
+    \end{subfigure}
+
+    \vspace{0.5cm} % spacing between rows
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_4/464.h264ref.cslab_branch_preds_ref.out.png}
+        \caption{464.h264ref}
+        \label{fig:plot61}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_4/470.lbm.cslab_branch_preds_ref.out.png}
+        \caption{470.lbm}
+        \label{fig:plot62}
+    \end{subfigure}
+
+    \vspace{0.5cm} % spacing between rows
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_4/471.omnetpp.cslab_branch_preds_ref.out.png}
+        \caption{471.omnetpp}
+        \label{fig:plot63}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/5_4/483.xalancbmk.cslab_branch_preds_ref.out.png}
+        \caption{483.xalancbmk}
+        \label{fig:plot64}
+    \end{subfigure}
+    
+    \vspace{0.5cm} % spacing between rows
+
+    \caption{(continued)}
+    \label{fig:btb_part3}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/5_4/geom_mean.png}
+    \caption{Geometric Mean MPKI for BTB predictors}
+    \label{fig:mean_mpkis_BTBs}
+\end{figure}
+
+Η απόδοση των διαφόρων διαμορφώσεων BTB επηρεάζεται από τον αριθμό των εγγραφών (entries) και την associativity, καθώς αυτά καθορίζουν την ικανότητα αποθήκευσης και γρήγορης ανάκτησης διευθύνσεων στόχων διακλαδώσεων.
+
+\textbf{Αριθμός Εγγραφών (Entries):} Όσο περισσότερες οι εγγραφές, τόσο περισσότερες μοναδικές διακλαδώσεις μπορεί να αποθηκεύσει ο BTB, μειώνοντας τα \textit{capacity misses}—δηλαδή, αστοχίες λόγω ανεπαρκούς χώρου.
+
+\textbf{Associativity:} Ορίζει πόσες διαφορετικές διακλαδώσεις μπορούν να αντιστοιχηθούν στην ίδια ομάδα (set). Υψηλότερη associativity μειώνει τα \textit{conflict misses}, δηλαδή αστοχίες που προκύπτουν από σύγκρουση πολλών διακλαδώσεων στον ίδιο περιορισμένο αριθμό θέσεων.
+
+\vspace{0.3cm} \textbf{Επίδραση της Associativity (σταθερός αριθμός entries):} \begin{itemize} \item 512-1 (4.10) → 512-2 (3.94): Μεγάλη βελτίωση από associativity 1 σε 2. \item 256-2 (3.98) → 256-4 (3.92): Μικρή αλλά μετρήσιμη βελτίωση. \item 128-2 (4.09) → 128-4 (3.94): Σημαντική βελτίωση. \item 64-4 (4.01) → 64-8 (3.93): Αξιοσημείωτη βελτίωση. \end{itemize}
+
+\textbf{Επίδραση του Αριθμού Εγγραφών (σταθερή associativity):} \begin{itemize} \item Associativity 2: 128-2 (4.09) → 256-2 (3.98) → 512-2 (3.94) \item Associativity 4: 64-4 (4.01) → 128-4 (3.94) → 256-4 (3.92) \end{itemize}
+
+\vspace{0.3cm} \textbf{Παρατηρήσεις:} \begin{itemize} \item Οι καλύτερες επιδόσεις (χαμηλότερο MPKI) εμφανίζονται στις διαμορφώσεις: 256-4 (3.92), 64-8 (3.93), 512-2 (3.94), και 128-4 (3.94). \item Η αύξηση μόνο των entries χωρίς ανάλογη αύξηση στην associativity (π.χ., 512-1) οδηγεί σε χαμηλή απόδοση λόγω conflict misses. \item Η αύξηση της associativity αποδεικνύεται σταθερά ευεργετική για την απόδοση. \end{itemize}
+
+\vspace{0.3cm} \textbf{Επιλογή Διαμόρφωσης:}
+
+Η επιλογή του βέλτιστου BTB εξαρτάται από τον συμβιβασμό ανάμεσα στην απόδοση (χαμηλό MPKI) και το κόστος υλοποίησης (σε μέγεθος και πολυπλοκότητα). Ένας πρακτικός δείκτης μεγέθους είναι το γινόμενο \textit{Entries × Associativity}:
+
+\begin{itemize} \item \textbf{256-4}: Καλύτερη απόδοση (3.92 MPKI), μέγεθος 256×4=1024. \item \textbf{64-8}: Ανταγωνιστική απόδοση (3.93 MPKI), μικρότερο μέγεθος 64×8=512. \item \textbf{128-4}: Εξίσου καλή απόδοση (3.94 MPKI), ίδιο μέγεθος με το 64-8. \item \textbf{512-2}: Καλή απόδοση (3.94 MPKI), αλλά μεγαλύτερο μέγεθος 512×2=1024. \end{itemize}
+
+\textbf{Συμπέρασμα:}
+Παρόλο που η διαμόρφωση \textbf{256-4} προσφέρει την απόλυτα καλύτερη απόδοση, οι διαμορφώσεις \textbf{64-8} και \textbf{128-4} αποτελούν εξαιρετικές εναλλακτικές με παρόμοια απόδοση και σημαντικά μικρότερο υπολογιζόμενο μέγεθος. Συνεπώς, για έναν καλό συμβιβασμό ανάμεσα σε απόδοση και κόστος υλικού, προτείνεται η διαμόρφωση \textbf{64-8} ή \textbf{128-4}.
+\vspace{0.3cm}
+\noindent \textbf{Τελική Επιλογή:} Το \textbf{BTB-256-4} αποτελεί την καλύτερη ισορροπία μεταξύ επίδοσης και κόστους υλοποίησης.
+
+\subsection{Μελέτη του RAS}
+Η \textbf{Return Address Stack (RAS)} είναι ένας εξειδικευμένος μηχανισμός πρόβλεψης διακλαδώσεων που χρησιμοποιείται για την πρόβλεψη διευθύνσεων επιστροφής από υπορουτίνες (function calls). Κάθε φορά που εκτελείται μία εντολή \texttt{call}, η διεύθυνση επιστροφής αποθηκεύεται στη στοίβα της RAS. Όταν αργότερα εκτελείται μία \texttt{return}, η προβλεπόμενη διεύθυνση λαμβάνεται από την κορυφή της στοίβας. Αυτός ο μηχανισμός είναι εξαιρετικά αποτελεσματικός, καθώς οι \texttt{return} εντολές εμφανίζονται συχνά και η αλληλουχία \texttt{call-return} διατηρείται κατά κανόνα με μεγάλη ακρίβεια.
+
+Η απόδοση της RAS επηρεάζεται κυρίως από το μέγεθός της, δηλαδή από τον αριθμό των διευθύνσεων που μπορεί να κρατήσει. Μια μικρή RAS μπορεί να "ξεχειλίσει" όταν υπάρχουν πολλές εμφωλευμένες κλήσεις (nested calls), οδηγώντας σε λάθος πρόβλεψη. Αντίθετα, μια πολύ μεγάλη RAS μπορεί να καταναλώνει περιττούς πόρους χωρίς σημαντική βελτίωση στην απόδοση.
+
+\vspace{0.3cm} \textbf{Δοκιμασμένες διαμορφώσεις RAS:}
+
+\begin{lstlisting}[style=cppstyle]
+    VOID InitRas()
+    {
+        for (UINT32 i = 4; i <= 64; i*=2) {
+            ras_vec.push_back(new RAS(i));
+            if (i == 32)
+                ras_vec.push_back(new RAS(48));
+    
+            }
+    }
+\end{lstlisting}
+
+\end{document}
